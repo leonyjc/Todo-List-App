@@ -33,6 +33,23 @@ app.post("/", async(req, res) => {
     res.status(500).send('Server error ${err}')
   }
 })
+
+app.delete("/:id", async (req, res) => {
+  const taskId = req.params.id;
+  try {
+    const deletedTask = await knex("tasks").where({ id: taskId}).del();
+    if(deletedTask) {
+      res.status(200).send(`Task with ID ${taskId} deleted successfully`);
+    }
+    else {
+      res.status(404).send(`Task with ID ${taskId} not found`);
+    }
+  } catch (error) {
+    console.error("Error deleting task", error);
+    res.status(500).send("Error deleting task");
+  }
+});
+
 app.listen(8080, () => {
   console.log("Server Started on http://localhost:8080");
   console.log("Press CTRL + C to stop server");

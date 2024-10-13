@@ -25,6 +25,16 @@ export default function App() {
     }
   };
 
+  const deletedTask = async(id) => {
+    try {
+      const response = await axios.delete(`http://localhost:8080/${id}`);
+      fetchTasks();
+    }
+    catch (error) {
+      console.log(`Error deleting task ${error}`);
+    }
+  }
+
   const addTask = async () => {
     if (taskName && priority && dueDate) {
       const newTask = {
@@ -63,7 +73,11 @@ export default function App() {
           <Text style={styles.task_field}>Task Priority: {task.priority}</Text>
           <Text style={styles.task_field}>Task Due: {formatDate(new Date(task.due_date))}</Text>
         </View>
-        <TouchableOpacity style={styles.task_deleted_button}>
+        <TouchableOpacity style={styles.task_edit_button}
+        >
+          <Text style={styles.task_edit_text}>Edit</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.task_deleted_button} onPress={()=>deletedTask(task.id)}>
           <Text  style={styles.task_deleted_text} > X </Text> 
         </TouchableOpacity>
 
@@ -197,6 +211,23 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems:"center"
   },
+  
+  task_edit_button : {
+    backgroundColor: "#000000",
+    borderColor: "white",
+    borderWidth: 1,
+    width :30,
+    height: 30,
+    borderRadius :"100%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  task_edit_text: {
+    color: "white",
+    fontSize: 10,
+  },
+
   task_deleted_text:{
     color: "white",
     fontWeight:"bold",
