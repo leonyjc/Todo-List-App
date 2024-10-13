@@ -1,0 +1,18 @@
+Run frontend
+> npx expo start
+
+Run backend
+> npm run start
+
+Migrate database (create tables in database)
+> npm migrate
+Seed database (add some testing/fake data to database)
+> npm seed
+Deleted all the data in database
+> npm rollback
+
+
+Commit new version to github
+> git add .
+> git commit -m "your message ....."
+> git push
