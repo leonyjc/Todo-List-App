@@ -9,16 +9,17 @@ import {
 } from "react-native";
 import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
-import DateTimePicker from "@react-native-community/datetimepicker";
 import { useFocusEffect } from "@react-navigation/native";
+import FormInput from "../components/FormInput";
+import FormDatePicker from "../components/FormDatePicker";
 
 export default function HomePage({ navigation }) {
   const [tasks, setTasks] = useState([]);
   const [taskName, setTaskName] = useState("");
   const [priority, setPriority] = useState("");
   const [dueDate, setDueDate] = useState(new Date());
-  const [showPicker, setShowPicker] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [showPicker, setShowPicker] = useState(false);
 
   const fetchTasks = useCallback(async () => {
     try {
@@ -35,6 +36,10 @@ export default function HomePage({ navigation }) {
     }, [fetchTasks])
   );
 
+  function formatDate(date) {
+    return date.toLocaleDateString();
+  }
+
   const deletedTask = async (id) => {
     try {
       await axios.delete(`http://localhost:8080/${id}`);
@@ -43,13 +48,25 @@ export default function HomePage({ navigation }) {
       console.log(`Error deleting task ${error}`);
     }
   };
+  const onChange = (event, selectedDate) => {
+    setShowPicker(false);
+    if (selectedDate) {
+      setDueDate(selectedDate);
+    }
+  };
+
+  const showDatePicker = () => {
+    setShowPicker(true);
+  };
 
   const addTask = async () => {
     if (taskName && priority && dueDate) {
       const newTask = {
         taskname: taskName,
         priority: parseInt(priority),
-        due_date: dueDate.toISOString().split("T")[0],
+        due_date: `${dueDate.getFullYear()}-${String(
+          dueDate.getMonth() + 1
+        ).padStart(2, "0")}-${String(dueDate.getDate()).padStart(2, "0")}`,
       };
 
       try {
@@ -67,10 +84,6 @@ export default function HomePage({ navigation }) {
       setErrorMessage("Please fill in all fields");
     }
   };
-
-  function formatDate(date) {
-    return date.toLocaleDateString();
-  }
 
   function extractTaskName(task) {
     return (
@@ -98,17 +111,6 @@ export default function HomePage({ navigation }) {
     );
   }
 
-  const showDatePicker = () => {
-    setShowPicker(true);
-  };
-
-  const onChange = (event, selectedDate) => {
-    setShowPicker(false);
-    if (selectedDate) {
-      setDueDate(selectedDate);
-    }
-  };
-
   return (
     <View style={styles.container}>
       <View style={styles.scroll_view}>
@@ -120,33 +122,25 @@ export default function HomePage({ navigation }) {
           )}
         </ScrollView>
       </View>
-
-      <Text style={styles.taskLabel}>Task Name:</Text>
-      <TextInput
-        style={styles.taskInput}
-        value={taskName}
+      <FormInput
+        input_label="Task Name:"
+        input_value={taskName}
         onChangeText={setTaskName}
       />
-      <Text style={styles.taskLabel}>Task Priority:</Text>
-      <TextInput
-        style={styles.taskInput}
-        value={priority}
+
+      <FormInput
+        input_label="Task Priority:"
+        input_value={priority}
         onChangeText={setPriority}
         keyboardType="numeric"
       />
-      <Text style={styles.taskLabel}>Task Due Date:</Text>
-      <TouchableOpacity style={styles.taskInput} onPress={showDatePicker}>
-        <Text style={{ color: "#3F0013" }}>{formatDate(dueDate)}</Text>
-      </TouchableOpacity>
 
-      {showPicker && (
-        <DateTimePicker
-          value={dueDate}
-          mode="date"
-          display="default"
-          onChange={onChange}
-        />
-      )}
+      <FormDatePicker
+        theDate={dueDate}
+        onChange={onChange}
+        onPress={showDatePicker}
+        showPicker={showPicker}
+      />
 
       {errorMessage ? (
         <Text style={styles.errorText}>{errorMessage}</Text>
@@ -159,27 +153,13 @@ export default function HomePage({ navigation }) {
   );
 }
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#A1A8BE",
     paddingHorizontal: 20,
-    paddingTop: 80,
   },
-  taskLabel: {
-    color: "#3F0013",
-    marginVertical: 4,
-    padding: 10,
-  },
-  taskInput: {
-    backgroundColor: "#fff",
-    color: "#3F0013",
-    margin: 4,
-    padding: 10,
-    borderRadius: 5,
-    alignItems: "center", // Center the date text
-  },
+
   addButton: {
     backgroundColor: "#007BFF",
     paddingVertical: 10,
@@ -198,7 +178,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   scroll_view: {
-    height: 450,
+    height: 420,
   },
   task_item_container: {
     backgroundColor: "#272727",

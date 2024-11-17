@@ -1,9 +1,9 @@
-import { StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import EditTaskPage from "./pages/EditTaskPage";
 import HomePage from "./pages/HomePage";
-
+import FormInput from "./components/FormInput";
 
 const Stack = createStackNavigator();
 export default function App() {
@@ -22,7 +22,10 @@ export default function App() {
         ></Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
+
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+
+});
