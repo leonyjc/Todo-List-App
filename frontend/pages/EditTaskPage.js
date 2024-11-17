@@ -7,11 +7,16 @@ import {
   TextInput,
 } from "react-native";
 import React, { useState } from "react";
+import FormDatePicker from "../components/FormDatePicker"
+import FormInput from "../components/FormInput"
 
 export default function EditTaskPage({ route, navigation }) {
   const task = route.params.task;
   console.log(task);
   const [taskName, setTaskName] = useState(task.taskname);
+  const [priority, setPriority] = useState(task.priority);
+  const [dueDate, setDueDate] = useState(new Date(task.due_date));
+  const [showPicker, setShowPicker] = useState(false);
   const updateTask = async () => {
     try {
       editedTask = {
@@ -24,20 +29,43 @@ export default function EditTaskPage({ route, navigation }) {
       console.error(error);
     }
   };
+  const onChange = (event, selectedDate) => {
+    setShowPicker(false);
+    if (selectedDate) {
+      setDueDate(selectedDate);
+    }
+  };
+
+  const showDatePicker = () => {
+    setShowPicker(true);
+  };
 
   return (
     <View>
-      <Text style={styles.taskLabel}>Task Name:</Text>
-      <TextInput
-        style={styles.taskInput}
-        value={taskName}
+      <FormInput
+        input_label="Task Name:"
+        input_value={`${taskName}`}
         onChangeText={setTaskName}
+      />
+
+      <FormInput
+        input_label="Task Priority:"
+        input_value={`${priority}`}
+        onChangeText={(value) => setPriority(Number(value))} // Convert back to number
+        keyboardType="numeric"
+      />
+      <FormDatePicker
+        theDate={dueDate}
+        onChange={onChange}
+        onPress={showDatePicker}
+        showPicker={showPicker}
       />
       <TouchableOpacity style={styles.saveButton} onPress={updateTask}>
         <Text style styles="styles.saveButtonText">
           Save
         </Text>
       </TouchableOpacity>
+      
     </View>
   );
 }
