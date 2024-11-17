@@ -20,8 +20,9 @@ export default function EditTaskPage({ route, navigation }) {
   const updateTask = async () => {
     try {
       editedTask = {
-        taskname: "hhhhhh",
-        due_date: "2024-11-5",
+        taskname: taskName,
+        priority: priority,
+        due_date: dueDate.toISOString().slice(0, 10),
       };
       await axios.put(`http://localhost:8080/${task.id}`, editedTask);
       navigation.goBack();
