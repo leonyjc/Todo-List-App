@@ -16,7 +16,6 @@ export default function EditTaskPage({ route, navigation }) {
   const [taskName, setTaskName] = useState(task.taskname);
   const [priority, setPriority] = useState(task.priority);
   const [dueDate, setDueDate] = useState(new Date(task.due_date));
-  const [showPicker, setShowPicker] = useState(false);
   const updateTask = async () => {
     try {
       editedTask = {
@@ -29,16 +28,6 @@ export default function EditTaskPage({ route, navigation }) {
     } catch (error) {
       console.error(error);
     }
-  };
-  const onChange = (event, selectedDate) => {
-    setShowPicker(false);
-    if (selectedDate) {
-      setDueDate(selectedDate);
-    }
-  };
-
-  const showDatePicker = () => {
-    setShowPicker(true);
   };
 
   return (
@@ -57,9 +46,7 @@ export default function EditTaskPage({ route, navigation }) {
       />
       <FormDatePicker
         theDate={dueDate}
-        onChange={onChange}
-        onPress={showDatePicker}
-        showPicker={showPicker}
+        setTheDate={setDueDate}
       />
       <TouchableOpacity style={styles.saveButton} onPress={updateTask}>
         <Text style styles="styles.saveButtonText">

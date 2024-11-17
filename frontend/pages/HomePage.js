@@ -19,8 +19,7 @@ export default function HomePage({ navigation }) {
   const [priority, setPriority] = useState("");
   const [dueDate, setDueDate] = useState(new Date());
   const [errorMessage, setErrorMessage] = useState("");
-  const [showPicker, setShowPicker] = useState(false);
-
+  
   const fetchTasks = useCallback(async () => {
     try {
       const response = await axios.get("http://localhost:8080/");
@@ -47,16 +46,6 @@ export default function HomePage({ navigation }) {
     } catch (error) {
       console.log(`Error deleting task ${error}`);
     }
-  };
-  const onChange = (event, selectedDate) => {
-    setShowPicker(false);
-    if (selectedDate) {
-      setDueDate(selectedDate);
-    }
-  };
-
-  const showDatePicker = () => {
-    setShowPicker(true);
   };
 
   const addTask = async () => {
@@ -137,9 +126,7 @@ export default function HomePage({ navigation }) {
 
       <FormDatePicker
         theDate={dueDate}
-        onChange={onChange}
-        onPress={showDatePicker}
-        showPicker={showPicker}
+        setTheDate={setDueDate}
       />
 
       {errorMessage ? (
