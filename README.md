@@ -206,7 +206,9 @@ frontend/
 ---
 
 ## Screenshots
+![Edit Task](assets/edit_task_page_screenshot.png)
 
+![Home Page](assets/home_screen.png)
 ### Home Page
 
 - Displays a list of tasks with task name, priority, and due date.
@@ -220,7 +222,7 @@ frontend/
 
 ## Demo
 
-![Demo Video](demo.gif)
+![Demo Video](assets/demo.gif)
 
 ---
 
