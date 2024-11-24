@@ -31,7 +31,7 @@ export default function EditTaskPage({ route, navigation }) {
   };
 
   return (
-    <View>
+    <View style={styles.container}>
       <FormInput
         input_label="Task Name:"
         input_value={`${taskName}`}
@@ -59,6 +59,12 @@ export default function EditTaskPage({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "#A1A8BE",
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    flex: 1,
+  },
   saveButton: {
     backgroundColor: "#007BFF",
     paddingVertical: 10,
